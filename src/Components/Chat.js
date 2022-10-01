@@ -36,6 +36,9 @@ function Chat() {
             fileName: imageFile.name,
         }
         const base64 = await convertBase64(imageFile);
+        socket.emit("loadingNotification", {roomId: 123, userId: socket.id}, (response) =>{
+            console.log(response.status);
+        });
         socket.emit("uploadImage", base64, imageObject, (response) =>{
             console.log(response.status);
             console.log(response.base64);
@@ -68,10 +71,13 @@ function Chat() {
             setMessages([...messages, {text: data.text}]);
             console.log(messages)
         });
+        socket.on('getLoadingNotification', (data) =>{
+            setReceiveLoading(true);
+        })
         socket.on('getImageNotification', (data) =>{
             console.log(data.imageNotification);
             setReceiveLoading(true);
-        })
+        });
         socket.on("getImage", (data) =>{
             async function fetchBase64() {
                 const response = await data.base64;
@@ -98,7 +104,7 @@ function Chat() {
                     <button>Send Image</button>
                 </form>
                 {(sendLoading && imageFile != null) ? <h1>Sending...</h1> : <></>}
-                {(receiveLoading) ? <h1>loading...</h1> : (imageFile === '') ? <></> : <h1>Image</h1>}
+                {(receiveLoading) ? <h1>loading...</h1> : <></>}
                 <hr />
                 {messages.map((payload, index) =>{
                     return(
