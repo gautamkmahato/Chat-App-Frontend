@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 //import { v4 as uuidv4 } from 'uuid';
 
-const socket = io("http://localhost:5000/");
+const socket = io("https://chat-app-backend-nc06.onrender.com");
 
 function Chat() {
 
